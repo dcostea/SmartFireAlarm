@@ -3,15 +3,71 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using Microsoft.ML;
+using Microsoft.ML.Data;
+using Microsoft.AspNetCore.Html;
+using Microsoft.DotNet.Interactive.Formatting;
+using static Microsoft.DotNet.Interactive.Formatting.PocketViewTags;
+using System.Diagnostics;
+using System.Security;
 
 public static class Helpers
 {
+    public static PocketView GetPredictionPerClass(ModelOutput predicted, DataViewSchema schema)
+    {
+        var scoreEntries = GetScoreNames(schema).ToArray();
+
+        var scores = new Dictionary<float, string>();
+        for (int i = 0; i < predicted.Score.Length; i++)
+        {
+            scores.Add(predicted.Score[i], scoreEntries[i]);
+        }
+
+        var headers = new List<IHtmlContent>
+        {
+            th(b("Prediction per class")),
+            th(b("Class"))
+        };
+
+        var rows = new List<List<IHtmlContent>>();
+        foreach (var score in scores.OrderByDescending(s => s.Key))
+        {
+            var cells = new List<IHtmlContent>();
+            cells.Add(td($"{score.Key:F4}"));
+            cells.Add(td(score.Value));
+            rows.Add(cells);
+        }
+
+        return table(
+            thead(
+                headers),
+            tbody(
+                rows.Select(
+                    r => tr(r))));
+    }
+
+    private static IEnumerable<string> GetScoreNames(DataViewSchema schema)
+    {
+        var column = schema.GetColumnOrNull("Score");
+        var slotNames = new VBuffer<ReadOnlyMemory<char>>();
+        column.Value.GetSlotNames(ref slotNames);
+
+        var names = new List<string>();
+
+        foreach (var denseValue in slotNames.DenseValues())
+        {
+            names.Add(denseValue.ToString());
+        }
+
+        return names;
+    }
+
     /// <summary>
     /// Compute Pearson correlation of the matrix
     /// </summary>
     /// <param name="matrix"></param>
     /// <returns></returns>
-    public static double[,] GetZAxis(List<List<double>> matrix) 
+    public static double[,] GetPearsonCorrelation(List<List<double>> matrix) 
     {
         var length = matrix.Count();
 
