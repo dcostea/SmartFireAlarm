@@ -162,7 +162,7 @@ public class Formatters
 
             cells = new List<IHtmlContent>
             {
-                td[rowspan: $"{m.PerClassLogLoss.Count + 1}"](b("LogLoss by Class"))
+                td[rowspan: $"{m.PerClassLogLoss.Count + 1}"](b("LogLoss per Class"))
             };
             rows.Add(cells);
 
