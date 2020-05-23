@@ -119,21 +119,15 @@ public class Formatters
 
             var headers = new List<IHtmlContent>
             {
-                th("EVALUATION: Metrics for multi-class classification model")
+                th(b("EVALUATION: multi-class classification")),
+                th(b("Class")),
+                th(b("Value")),
+                th(b("Note"))
             };
 
             var rows = new List<List<IHtmlContent>>();
 
             var cells = new List<IHtmlContent>
-            {
-                td(b("Metric")),
-                td(b("Class")),
-                td(b("Value")),
-                td(b("Note"))
-            };
-            rows.Add(cells);
-
-            cells = new List<IHtmlContent>
             {
                 td(b("MacroAccuracy")),
                 td(""),
@@ -196,21 +190,15 @@ public class Formatters
 
             var headers = new List<IHtmlContent>
             {
-                th("CROSS-VALIDATION: Metrics for multi-class classification model")
+                th(b("CROSS-VALIDATION: multi-class classification")),
+                th(b("Average")),
+                th(b("Standard deviation")),
+                th(b("Confidence interval (95%)"))
             };
 
             var rows = new List<List<IHtmlContent>>();
 
             var cells = new List<IHtmlContent>
-            {
-                td(""),
-                td(b("Average")),
-                td(b("Standard deviation")),
-                td(b("Confidence interval (95%)"))
-            };
-            rows.Add(cells);
-
-            cells = new List<IHtmlContent>
             {
                 td(b("MacroAccuracy")),
                 td($"{macroAccuracyValues.average:0.000}"),
