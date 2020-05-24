@@ -5,11 +5,12 @@ using System.Linq;
 using System.Net;
 using Microsoft.ML;
 using Microsoft.ML.Data;
+using Microsoft.ML.Trainers;
 using Microsoft.AspNetCore.Html;
 using Microsoft.DotNet.Interactive.Formatting;
-using static Microsoft.DotNet.Interactive.Formatting.PocketViewTags;
 using System.Diagnostics;
 using System.Security;
+using static Microsoft.DotNet.Interactive.Formatting.PocketViewTags;
 
 public static class Helpers
 {
@@ -44,6 +45,31 @@ public static class Helpers
             tbody(
                 rows.Select(
                     r => tr(r))));
+    }
+
+    public static (IDictionary<string, IEnumerable<float>> weights, IDictionary<string, float> biases) GetModelParameters(TransformerChain<MulticlassPredictionTransformer<LinearMulticlassModelParameters>> modelForContributions, string[] categories) 
+    {
+        var modelParameters = modelForContributions.Last() as MulticlassPredictionTransformer<LinearMulticlassModelParameters>;
+
+        VBuffer<float>[] weights = default;
+        modelParameters.Model.GetWeights(ref weights, out int numClasses);
+
+        var weightsDictionary = new Dictionary<string, IEnumerable<float>>();
+        var i = 0;
+        foreach (var weight in weights)
+        {
+            weightsDictionary.Add(categories[i++], (weight as VBuffer<float>?).Value.DenseValues());
+        }
+
+        var biases = modelParameters.Model.GetBiases();
+        var biasesDictionary = new Dictionary<string, float>();
+        i = 0;
+        foreach (var bias in biases)
+        {
+            biasesDictionary.Add(categories[i++], bias);
+        }
+
+        return (weightsDictionary, biasesDictionary);
     }
 
     private static IEnumerable<string> GetScoreNames(DataViewSchema schema)
