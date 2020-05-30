@@ -5,18 +5,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Jupyter\Helpers.cs" />
+    <None Remove="Jupyter\Formatters.csx" />
+    <None Remove="Jupyter\Models.csx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Jupyter\Formatters.csx" />
+    <Compile Include="Jupyter\Models.csx" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Analysis" Version="0.4.0" />
     <PackageReference Include="Microsoft.DotNet.Interactive" Version="1.0.0-beta.20154.7" />
-    <PackageReference Include="Microsoft.ML" Version="1.5.0-preview2" />
+    <PackageReference Include="Microsoft.ML" Version="1.5.0" />
+    <PackageReference Include="MathNet.Numerics" Version="4.11.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Jupyter\Helpers.cs" />
-  </ItemGroup>
-
 
 </Project>
