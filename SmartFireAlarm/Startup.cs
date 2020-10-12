@@ -19,12 +19,14 @@ namespace SmartFireAlarm
         {
             Configuration = configuration;
         }
-
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
+
             services.AddControllers();
         }
 
@@ -42,6 +44,7 @@ namespace SmartFireAlarm
 
             app.UseAuthorization();
 
+            app.UseCors(o => o.WithOrigins("https://localhost:44388/").AllowAnyMethod().AllowAnyHeader());
             app.UseFileServer();
 
             app.UseEndpoints(endpoints =>

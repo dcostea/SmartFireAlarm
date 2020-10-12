@@ -26,21 +26,21 @@ public class ModelInput
 public class ModelOutput
 {
     [ColumnName("PredictedLabel")]
-    public string PredictedLabel;
+    public string PredictedLabel { get; set; }
 
     [ColumnName("Score")]
-    public float[] Score;
+    public float[] Score { get; set; }
 }
 
 public class CustomInputRow
 {
-    public string CreatedAt;
+    public string CreatedAt { get; set; }
 }
 
 public class CustomOutputRow
 {
-    public float Hour;
-    public float Day;
+    public float Hour { get; set; }
+    public float Day { get; set; }
 }
 
 [CustomMappingFactoryAttribute(nameof(CustomMappings.IncomeMapping))]
