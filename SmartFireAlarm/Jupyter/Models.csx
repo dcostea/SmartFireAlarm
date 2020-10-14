@@ -17,9 +17,15 @@ public class ModelInput
     public float Distance { get; set; }
 
     [LoadColumn(4)]
+    public float PIR { get; set; }
+
+    [LoadColumn(5)]
+    public float Humidity { get; set; }
+
+    [LoadColumn(6)]
     public string CreatedAt { get; set; }
 
-    [ColumnName("Label"), LoadColumn(5)]
+    [ColumnName("Label"), LoadColumn(7)]
     public string Source { get; set; }
 }
 
